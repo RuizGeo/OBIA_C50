@@ -8,14 +8,14 @@ library(ggplot2)
 library(base)
 library(psych)
 #leitura do arquivo shape amostras
-shape = readShapePoints("C:/LuisFernando/Pesquisas/OBIA_C50/classificacoes/SHP/Seg100/trein_seg10_100.shp")
-shape.test = readShapePoints("C:/LuisFernando/Pesquisas/OBIA_C50/classificacoes/SHP/Seg100/val_seg10_100.shp")
+shape = readShapePoints("path_file.shp")
+shape.test = readShapePoints("path_file.shp")
 #leitura dos arauivos csv
-textura = read.delim("C:/LuisFernando/Pesquisas/OBIA_C50/texturas/seg_100/seg_10_100_text.csv", head=T)
-espectral = read.table('C:/LuisFernando/Pesquisas/OBIA_C50/espectral/100/seg_10_100_espec.csv',head=T)
-geometrico = read.table('C:/LuisFernando/Pesquisas/OBIA_C50/geometricos/seg_100/geom_10_100.csv',head=T)
-contextual = read.table('C:/LuisFernando/Pesquisas/OBIA_C50/contextual/seg_100/context_10_100.csv',head=T)
-elev=read.table('C:/LuisFernando/Pesquisas/OBIA_C50/Elev/100/seg_10_100_elev.csv',head=T)
+textura = read.delim("path_file.csv", head=T)
+espectral = read.table('path_file.csv',head=T)
+geometrico = read.table('path_file.csv',head=T)
+contextual = read.table('path_file.csv',head=T)
+elev=read.table('path_file.csv',head=T)
 
 #Calcular razao entre bandas
 r_verde_azul = espectral$band2_mean/espectral$band3_mean
@@ -27,7 +27,7 @@ ratio_G = espectral$band2_mean/(espectral$band1_mean+espectral$band2_mean+espect
 ratio_B = espectral$band3_mean/(espectral$band1_mean+espectral$band2_mean+espectral$band3_mean)
 razoes_bandas = data.frame(r_verde_azul,r_vermelho_azul,r_verd_verm,ratio_R,ratio_G,ratio_B)
 #escrever CSV
-write.table(razoes_bandas, file = "C:/LuisFernando/Pesquisas/OBIA_C50/espectral/100/RB_seg10_100.csv", sep='\t',col.names = NA)
+write.table(razoes_bandas, file = "path_file.csv", sep='\t',col.names = NA)
 #dados para classifiar
 #dados =data.frame(espectral,contextual,geometrico,textura,elevacao,r_verde_azul,r_vermelho_azul,r_verd_verm,ratio_R,ratio_G,ratio_B )
 #Remover colunas
@@ -64,8 +64,8 @@ assessClassifyC50 = function(winnows,trial, min.Cases,data.train, train.classes,
 
 df_model =assessClassifyC50(c(TRUE, FALSE),c(1,5,(1:10)*10),c(2, (1:10)*5),data.trein,classes,data.test,classes.test)
 #salvar data.frame
-saveRDS(df_model, file="C:/LuisFernando/Pesquisas/OBIA_C50/classificacoes/object_R/seg10_100.Rda")
+saveRDS(df_model, file="path_file.Rda")
 
 best_model = C5.0(data.trein,classes,trial=80,control=C5.0Control(winnow=FALSE,minCases=5))
-cat(as.character(summary(best_model)),file="C:/LuisFernando/Pesquisas/OBIA_C50/classificacoes/AD/seg10_100_t80_mc5_wF.txt",append=TRUE)
+cat(as.character(summary(best_model)),file="path_file.txt",append=TRUE)
 help(cat)
